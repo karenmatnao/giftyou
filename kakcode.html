@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quà Tặng Em ♡</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+  background:linear-gradient(135deg,#ffafbd 0%,#ffc3a0 100%);
+  font-family:Arial,sans-serif;
+}
+
+/* ── PARTICLES ── */
+#particles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+.particle{
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+  animation:floatUp linear infinite;
+}
+.particle.dot{
+  width:4px;height:4px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.8);
+}
+.particle.heart{
+  color:rgba(255,160,180,0.7);
+  font-size:14px;
+  line-height:1;
+}
+@keyframes floatUp{
+  0%  {transform:translateY(0) scale(1);   opacity:0}
+  10% {opacity:1}
+  90% {opacity:.6}
+  100%{transform:translateY(-110vh) scale(.8);opacity:0}
+}
+
+/* ── SCENE ── */
+#scene{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+
+/* ── GIFT BOX ── */
+#gift{
+  position:relative;
+  cursor:pointer;
+  user-select:none;
+  z-index:3;
+  width:200px;
+}
+
+/* BOW */
+.bow-wrap{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:-62px;
+  z-index:6;
+  width:80px;
+  height:62px;
+}
+.bow-wrap svg{
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.18));
+}
+
+/* LID */
+.lid{
+  position:relative;
+  z-index:5;
+  width:220px;
+  left:-10px;
+  height:44px;
+  background:linear-gradient(180deg,#ff6fa8 0%,#ff4d88 100%);
+  border:2.5px solid #b03060;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.15), inset 0 2px 0 rgba(255,255,255,.25);
+  transition:transform 1s cubic-bezier(.4,0,.2,1), opacity .8s;
+  transform-origin:left top;
+  overflow:visible;
+}
+/* ribbon strip on lid */
+.lid::before{
+  content:'';
+  position:absolute;
+  left:50%;transform:translateX(-50%);
+  top:0;bottom:0;
+  width:26px;
+  background:linear-gradient(180deg,#ffe08a,#ffc940);
+  border-left:2px solid #b8860b;
+  border-right:2px solid #b8860b;
+}
+
+/* BOX */
+.box{
+  position:relative;
+  z-index:4;
+  width:200px;
+  height:150px;
+  background:linear-gradient(180deg,#ff5f96 0%,#ff3d7f 100%);
+  border:2.5px solid #b03060;
+  border-top:none;
+  border-radius:0 0 12px 12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18), inset 0 -3px 0 rgba(0,0,0,.08);
+  overflow:hidden;
+}
+/* vertical ribbon on box */
+.box::before{
+  content:'';
+  position:absolute;
+  left:50%;transform:translateX(-50%);
+  top:0;bottom:0;
+  width:26px;
+  background:linear-gradient(180deg,#ffe08a,#ffc940);
+  border-left:2px solid #b8860b;
+  border-right:2px solid #b8860b;
+}
+/* horizontal ribbon on box */
+.box::after{
+  content:'';
+  position:absolute;
+  top:50px;
+  left:0;right:0;
+  height:26px;
+  background:linear-gradient(180deg,#ffe08a,#ffc940);
+  border-top:2px solid #b8860b;
+  border-bottom:2px solid #b8860b;
+}
+/* heart on box */
+.box-heart{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) translateY(10px);
+  font-size:20px;
+  z-index:2;
+  opacity:.9;
+  color:#fff;
+  text-shadow:0 1px 2px rgba(0,0,0,.2);
+}
+
+/* SHAKE animation */
+@keyframes shake{
+  0%,100%{transform:rotate(0deg)}
+  20%     {transform:rotate(-3deg)}
+  40%     {transform:rotate(3deg)}
+  60%     {transform:rotate(-2deg)}
+  80%     {transform:rotate(2deg)}
+}
+#gift.shaking{animation:shake .5s ease-in-out}
+
+/* OPEN: lid flies off */
+#gift.open .lid{
+  transform:rotate(-35deg) translate(-120px,-160px);
+  opacity:0;
+}
+#gift.open .bow-wrap{
+  transition:transform 1s, opacity .8s;
+  transform:translateX(-50%) rotate(-35deg) translate(-120px,-160px);
+  opacity:0;
+}
+
+/* ── VIDEO WRAP ── */
+#videoWrap{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  pointer-events:none;
+  overflow:hidden;
+}
+#videoInner{
+  position:relative;
+  width:min(90vw, calc(85vh * 9/16));
+  aspect-ratio:9/16;
+  opacity:0;
+  transform:scale(.1) translateY(30vh);
+  transition:none;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 0 60px rgba(255,100,150,.5), 0 20px 60px rgba(0,0,0,.3);
+}
+#videoInner video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:16px;
+  display:block;
+}
+
+/* VIDEO ANIMATION STATES */
+#videoInner.rising{
+  animation:videoRise 1.4s cubic-bezier(.2,0,.3,1) forwards;
+}
+#videoInner.expanding{
+  animation:videoExpand 1.2s cubic-bezier(.25,0,.1,1) forwards;
+}
+@keyframes videoRise{
+  0%  {opacity:0;transform:scale(.15) translateY(30vh)}
+  30% {opacity:1}
+  100%{opacity:1;transform:scale(.45) translateY(-10vh)}
+}
+@keyframes videoExpand{
+  0%  {opacity:1;transform:scale(.45) translateY(-10vh)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+
+/* ── CURTAIN ── */
+#curtain{
+  position:fixed;
+  inset:0;
+  z-index:19;
+  pointer-events:none;
+  overflow:hidden;
+}
+.curtain-panel{
+  position:absolute;
+  top:0;bottom:0;
+  width:50%;
+  background:linear-gradient(135deg,#ff6fa8 0%,#ff3d7f 60%,#e6005c 100%);
+  transition:transform 1s cubic-bezier(.7,0,.3,1);
+}
+.curtain-panel::after{
+  content:'';
+  position:absolute;
+  top:0;bottom:0;
+  width:8px;
+  background:linear-gradient(180deg,#ffe08a,#ffc940);
+}
+.curtain-left {
+  left:0;
+  transform:translateX(-100%);
+}
+.curtain-left::after{right:0;}
+.curtain-right{
+  right:0;
+  transform:translateX(100%);
+}
+.curtain-right::after{left:0;}
+
+/* curtain visible */
+#curtain.show .curtain-left {transform:translateX(0)}
+#curtain.show .curtain-right{transform:translateX(0)}
+/* curtain opening */
+#curtain.opening .curtain-left {transform:translateX(-100%)}
+#curtain.opening .curtain-right{transform:translateX(100%)}
+
+/* ── SPARKLE BURST ── */
+.sparkle{
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:10;
+  animation:sparklePop .8s ease-out forwards;
+}
+@keyframes sparklePop{
+  0%  {transform:translate(0,0) scale(1);opacity:1}
+  100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
+}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<div id="scene">
+  <div id="gift">
+    <!-- Bow -->
+    <div class="bow-wrap">
+      <svg viewBox="0 0 80 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- left loop -->
+        <path d="M38 32 C20 28, 4 10, 10 4 C16 -2, 36 14, 38 32Z"
+              fill="#ff5f96" stroke="#b03060" stroke-width="2.2"/>
+        <!-- right loop -->
+        <path d="M42 32 C60 28, 76 10, 70 4 C64 -2, 44 14, 42 32Z"
+              fill="#ff5f96" stroke="#b03060" stroke-width="2.2"/>
+        <!-- left tail -->
+        <path d="M38 34 C28 40, 16 54, 20 60 C26 62, 36 46, 40 34Z"
+              fill="#ff4d88" stroke="#b03060" stroke-width="2"/>
+        <!-- right tail -->
+        <path d="M42 34 C52 40, 64 54, 60 60 C54 62, 44 46, 40 34Z"
+              fill="#ff4d88" stroke="#b03060" stroke-width="2"/>
+        <!-- centre knot -->
+        <ellipse cx="40" cy="32" rx="7" ry="6"
+                 fill="#ff2d72" stroke="#b03060" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <!-- Lid -->
+    <div class="lid"></div>
+
+    <!-- Box -->
+    <div class="box">
+      <div class="box-heart">♡</div>
+    </div>
+  </div>
+</div>
+
+<!-- Curtain -->
+<div id="curtain">
+  <div class="curtain-panel curtain-left"></div>
+  <div class="curtain-panel curtain-right"></div>
+</div>
+
+<!-- Video -->
+<div id="videoWrap">
+  <div id="videoInner">
+    <video id="vid" preload="auto" playsinline>
+      <source src="kinandkazumi.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<script>
+/* ── PARTICLES ── */
+const particleContainer = document.getElementById('particles');
+function createParticle(){
+  const el = document.createElement('div');
+  const isHeart = Math.random() < .4;
+  el.className = 'particle ' + (isHeart ? 'heart' : 'dot');
+  if(isHeart) el.textContent = '♡';
+  el.style.left = Math.random()*100 + 'vw';
+  el.style.bottom = '-20px';
+  const dur = 8 + Math.random()*10;
+  el.style.animationDuration = dur + 's';
+  el.style.animationDelay = (Math.random()*dur) + 's';
+  if(isHeart){
+    el.style.fontSize = (10 + Math.random()*10) + 'px';
+  }
+  particleContainer.appendChild(el);
+  setTimeout(()=>el.remove(), (dur+dur)*1000);
+}
+for(let i=0;i<40;i++) createParticle();
+setInterval(createParticle, 600);
+
+/* ── SHAKE ── */
+const gift = document.getElementById('gift');
+function doShake(){
+  gift.classList.remove('shaking');
+  void gift.offsetWidth;
+  gift.classList.add('shaking');
+}
+doShake();
+const shakeInterval = setInterval(doShake, 3000);
+
+/* ── SPARKLE BURST ── */
+function burst(cx, cy){
+  for(let i=0;i<18;i++){
+    const s = document.createElement('div');
+    s.className='sparkle';
+    const angle = (i/18)*Math.PI*2;
+    const dist = 60+Math.random()*80;
+    s.style.setProperty('--tx', Math.cos(angle)*dist+'px');
+    s.style.setProperty('--ty', Math.sin(angle)*dist+'px');
+    s.style.left = cx+'px';
+    s.style.top  = cy+'px';
+    s.style.width = s.style.height = (4+Math.random()*6)+'px';
+    s.style.background = Math.random()<.5 ? '#fff' : '#ffb3cc';
+    s.style.animationDelay = Math.random()*.2+'s';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 1000);
+  }
+}
+
+/* ── OPEN SEQUENCE ── */
+const videoInner = document.getElementById('videoInner');
+const vid        = document.getElementById('vid');
+const curtain    = document.getElementById('curtain');
+let opened = false;
+
+gift.addEventListener('click', ()=>{
+  if(opened) return;
+  opened = true;
+  clearInterval(shakeInterval);
+
+  /* position of gift center for burst */
+  const r = gift.getBoundingClientRect();
+  const cx = r.left + r.width/2;
+  const cy = r.top  + r.height/2;
+
+  /* 1. Open lid */
+  gift.classList.add('open');
+  burst(cx, cy);
+
+  /* 2. Video rises from box */
+  setTimeout(()=>{
+    videoInner.style.transition = 'none';
+    videoInner.classList.add('rising');
+  }, 600);
+
+  /* 3. Curtain slides in */
+  setTimeout(()=>{
+    curtain.classList.add('show');
+  }, 1800);
+
+  /* 4. Video expands to full behind curtain */
+  setTimeout(()=>{
+    videoInner.classList.remove('rising');
+    void videoInner.offsetWidth;
+    videoInner.classList.add('expanding');
+  }, 2100);
+
+  /* 5. Curtain opens */
+  setTimeout(()=>{
+    curtain.classList.remove('show');
+    curtain.classList.add('opening');
+  }, 3200);
+
+  /* 6. Play video */
+  setTimeout(()=>{
+    curtain.style.display='none';
+    videoInner.style.pointerEvents='auto';
+    document.getElementById('videoWrap').style.pointerEvents='auto';
+    vid.play().catch(()=>{});
+  }, 4400);
+});
+</script>
+</body>
+</html>
